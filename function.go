@@ -1,8 +1,18 @@
 package function
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	msg := "Hello, world!\n"
-	w.Write([]byte(msg))
+func Start(h http.HandlerFunc) {
+	start(h)
+}
+
+func start(h http.HandlerFunc) {
+	http.HandleFunc("/", h)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		panic("Fail starting server")
+	}
+	fmt.Println("Server started")
 }
